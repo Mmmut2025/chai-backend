@@ -1,0 +1,2 @@
+# we know that we can't commit the empty folder in github , a scenerio where we need to commit the empty folder in github for workflow purpose
+# so we simply put the .gitkeep file in empty folder then we can easily commit those empty folderv
