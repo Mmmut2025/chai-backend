@@ -1,11 +1,12 @@
 const asyncHandler = (requestHandler) => {
-    (req,res,next) => {
-        Promise.resolve(requestHandler())
-        .catch((err) => next(err))   //next is like a flag that indicate that now we can execute next middleware function 
+    return (req, res, next) => {
+        Promise.resolve(requestHandler(req, res, next))
+        .catch((err) => next(err))
     }
 }
 
-export {asyncHandler}
+
+export { asyncHandler }
 
 
 //Promises are used for handling asynchronous operations. 
