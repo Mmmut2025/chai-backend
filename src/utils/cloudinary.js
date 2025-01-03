@@ -1,5 +1,5 @@
 import { v2 as cloudinary } from 'cloudinary';
-import {fs} from "fs";    
+import fs from "fs";    
 //fs is a file system module provide by node js and no need to install.
 // Common use for the File System module:
 // Read files ,Create files , Update files , Delete files , Rename files
