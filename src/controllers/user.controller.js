@@ -20,7 +20,10 @@ const registerUser = asyncHandler(async (req, res) => {
 
     //STEP-1 :- take user detail
     const {fullName, email , username , password}= req.body   //contain the data come from form and json file
-    console.log("email" , email);
+    
+    
+    //console.log("email" , email);
+    //console.log(req.body);
 
     
 
@@ -38,23 +41,40 @@ const registerUser = asyncHandler(async (req, res) => {
     ){
         throw new ApiError(400 , "All fields are requied")
     }
+    
+
+
+
 
     
-    
     //step-3 check the user already exist in db or not
-    const existedUser = User.findOne({
+    const existedUser =await User.findOne({
         $or : [{ username },{ email }]
     })
-    
+
     if(existedUser){
         throw new ApiError(409 , "User with email or username already exist")
     }
 
 
+
+
+
     //step - 4  check for images
     //take file path from local storage
     const avatarLocalPath = req.files?.avatar[0]?.path;      //used for file and image //(?) questin mark esliye lagate h ki ho sakta h files ho ya n ho so its used for optional
-    const coverImageLocalPath = req.files?.coverImage[0].path;
+    // const coverImageLocalPath = req.files?.coverImage[0].path;
+
+
+
+    //it handle those situation if user don't provide the coverimage 
+    let coverImageLocalPath;
+    if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0){
+        coverImageLocalPath = req.files.coverImage[0].path;
+    }
+    //console.log(req.files)
+
+
 
     //check avatar aaya h ya nhi   ----------kyuki avatar is mandatory 
     if (!avatarLocalPath) {
@@ -64,14 +84,22 @@ const registerUser = asyncHandler(async (req, res) => {
 
 
 
+
+
+
+
+
     //step-5 upload image and avatar on cloudinary
     const avatar = await uploadOnCloudinary(avatarLocalPath);
     const coverImage = await uploadOnCloudinary(coverImageLocalPath);
     
+
     //check avatar coudinary par upload hua h ya nhi
     if(!avatar){
         throw new ApiError(400 , "Avatar file is required");
     }
+
+
 
 
 
@@ -104,7 +132,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 
 
-    
+
     //step-9  send the response
     return res.status(201).json(
         new ApiResponse(200,createdUser , "user registered successfully")

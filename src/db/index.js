@@ -1,12 +1,16 @@
 import mongoose from "mongoose";
-import  { DB_NAME }from "../constant.js"
+import { DB_NAME } from "../constant.js";
 
 //database is in another continent so create the funtion as async which connect database
 
 const connectDB = async () =>{
     try{
-
-        const connectionInstance = await mongoose.connect(`${process.env.MONGODB_URI}/${DB_NAME}`);
+        console.log(`${process.env.MONGODB_URI}`);
+        const connectionInstance = await mongoose.connect(process.env.MONGODB_URI, {
+            dbName: DB_NAME, // Specify the database name explicitly
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        }); 
         console.log( `\n mongodbconnected !! DB HOST : ${connectionInstance.connection.host}`);
     }
     catch(error){
