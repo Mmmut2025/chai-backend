@@ -69,34 +69,31 @@ userSchema.methods.isCorrectPassword= async function (password) {
 
 
 //it is used for set the access token and refresh token for user authorization to access certain resources for particular time
-userSchema.methods.generateAccessToken = function (){
+userSchema.methods.generateAccessToken = function(){
     return jwt.sign(
         {
-            //payload
-            _id : this._id,
-            email :this.email,
-            username:this.username,
-            fullName : this.fullName
+            _id: this._id,
+            email: this.email,
+            username: this.username,
+            fullName: this.fullName
         },
         process.env.ACCESS_TOKEN_SECRET,
         {
-            expiryIn : process.env.ACCESS_TOKEN_EXPIRY
+            expiresIn: process.env.ACCESS_TOKEN_EXPIRY
         }
     )
 }
-
-userSchema.methods.generateRefreshToken = function (){
+userSchema.methods.generateRefreshToken = function(){
     return jwt.sign(
         {
-            //payload
-            _id : this._id,
+            _id: this._id,
+            
         },
         process.env.REFRESH_TOKEN_SECRET,
         {
-            expiryIn : process.env.REFRESH_TOKEN_EXPIRY
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRY
         }
     )
 }
-
 export const User = mongoose.model("User" , userSchema)                                       
 
